@@ -19,6 +19,8 @@ class SecondTableViewController: UITableViewController {
     
     let thirdList: [String] = ["고객센터/도움말"]
     
+    // let으로 하면 선언과 동시에 초기화 되기 때문에 배열을 넣을 수 없음
+    // 하지만 lazy var를 통해서 사용자가 원할때 메모리에 올린다. 
     lazy var kindOfSection: [[String]] = [firstList, secondList, thirdList]
 
     override func viewDidLoad() {
@@ -29,7 +31,12 @@ class SecondTableViewController: UITableViewController {
         
         // tableview.style 사용 할 수 없음
         /*
-         왜냐하면 only - property임.. 스토리보드에 테이블 뷰 컨트롤러를 올렸기 때문에 (frame 과 style) defaults로 정해기 때문에 viewDidLoad에서 수정 할 수 없음
+         왜냐하면 only - property임.. 스토리보드에 테이블 뷰 컨트롤러를 올리면   defaults로 (frame: .zero 과 style: plain) 정해짐 viewDidLoad에서 수정 할 수 없음
+         
+         참고 문장 : 공식문서 출처
+         
+         You set the table style when you initialize the table view (see init(frame:style:)). ⭐️ You can’t modify the style thereafter. ⭐️ ( 스타일을 바꿀 수 없다 )
+            
          */
     }
     
