@@ -54,7 +54,16 @@ class CollectionViewListController : UIViewController {
             content.secondaryText = itemIdentifier.subtitle
             content.image = itemIdentifier.image
             cell.contentConfiguration = content
-            cell.accessories = [.outlineDisclosure()]
+            
+            // Cell이 SystemCell이라서 Switch는 못 다는거 같은데... CustomCell을 만들면 달 수는 있는데.. 그러면 firstSection은 SystemCell이고.. SecondSection은 CustomCell이면... 어떻게 Handler를 통해 한번에 적용 할 수 있을까?
+            
+            if indexPath.section == 0 {
+                cell.accessories = [.outlineDisclosure()]
+            }
+            print(indexPath)
+            
+           
+            
         })
         
         dataSource = UICollectionViewDiffableDataSource(collectionView: listCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
@@ -76,6 +85,7 @@ class CollectionViewListController : UIViewController {
     
     static func layout() -> UICollectionViewLayout {
         let configure = UICollectionLayoutListConfiguration(appearance: .grouped)
+        configure.showsSeparators = false
         let layout = UICollectionViewCompositionalLayout.list(using: configure)
         return layout
     }
