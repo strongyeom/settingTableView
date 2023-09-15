@@ -84,7 +84,7 @@ class CollectionViewListController : UIViewController {
     }
     
     static func layout() -> UICollectionViewLayout {
-        let configure = UICollectionLayoutListConfiguration(appearance: .grouped)
+        var configure = UICollectionLayoutListConfiguration(appearance: .grouped)
         configure.showsSeparators = false
         let layout = UICollectionViewCompositionalLayout.list(using: configure)
         return layout
