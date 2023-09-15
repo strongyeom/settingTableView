@@ -9,7 +9,9 @@ import UIKit
 import SnapKit
 
 
-struct SettingText {
+struct SettingText: Hashable {
+    
+    let id = UUID().uuidString
     let image: UIImage?
     let title: String
     let subtitle: String?
@@ -34,11 +36,13 @@ class CollectionViewListController : UIViewController {
     // UICollectionViewListCell : accessories를 사용하려면 listCell 이어야 한다?
     var CellRegisteration: UICollectionView.CellRegistration<UICollectionViewListCell, SettingText>!
     
+    var dataSource: UICollectionViewDiffableDataSource<Int, SettingText>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(listCollectionView)
-        listCollectionView.delegate = self
-        listCollectionView.dataSource = self
+//        listCollectionView.delegate = self
+//        listCollectionView.dataSource = self
         listCollectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -50,8 +54,21 @@ class CollectionViewListController : UIViewController {
             content.secondaryText = itemIdentifier.subtitle
             content.image = itemIdentifier.image
             cell.contentConfiguration = content
-            cell.accessories = [UICellAccessory.disclosureIndicator()]
+            cell.accessories = [.outlineDisclosure()]
         })
+        
+        dataSource = UICollectionViewDiffableDataSource(collectionView: listCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.CellRegisteration, for: indexPath, item: itemIdentifier)
+            return cell
+        })
+        
+        var snapShot = NSDiffableDataSourceSnapshot<Int,SettingText>()
+        snapShot.appendSections([0, 1])
+        snapShot.appendItems(firstList, toSection: 0)
+        snapShot.appendItems(secondList, toSection: 1)
+        
+        dataSource.apply(snapShot)
+        
         
         
         
@@ -65,17 +82,17 @@ class CollectionViewListController : UIViewController {
     
     
 }
-extension  CollectionViewListController: UICollectionViewDelegate, UICollectionViewDataSource {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-            return firstList.count
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let data = firstList[indexPath.item]
-        let cell = collectionView.dequeueConfiguredReusableCell(using: CellRegisteration, for: indexPath, item: data)
-        return cell
-    }
-}
+//extension  CollectionViewListController: UICollectionViewDelegate, UICollectionViewDataSource {
+//
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//
+//            return firstList.count
+//
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let data = firstList[indexPath.item]
+//        let cell = collectionView.dequeueConfiguredReusableCell(using: CellRegisteration, for: indexPath, item: data)
+//        return cell
+//    }
+//}
